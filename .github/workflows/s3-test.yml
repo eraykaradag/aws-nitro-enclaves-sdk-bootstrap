@@ -1,0 +1,40 @@
+name: S3 Binary Upload Test
+
+on: [workflow_dispatch]  # Manual trigger for testing
+
+env:
+  AWS_REGION: eu-central-1  # Frankfurt
+  S3_BUCKET: nitro-binaries-test
+
+jobs:
+  upload-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Nix
+        uses: cachix/install-nix-action@v22
+
+      - name: Build binaries
+        run: |
+          nix build
+          # Assuming binaries are in ./result/bin/
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload binaries
+        run: |
+          # Upload each binary
+          for arch in x86_64 aarch64; do
+            for binary in kernel linuxkit nsm.ko init cmdline; do
+              aws s3 cp \
+                ./result/bin/${binary}-${arch} \
+                s3://${S3_BUCKET}/${binary}-${arch}
+            done
+          done
