@@ -30,6 +30,13 @@ jobs:
               ;;
           esac
 
+      - name: List files
+        run: |
+          echo "Listing ./result:"
+          ls -la ./result
+          echo "Listing full structure:"
+          find ./result -type f
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -39,5 +46,5 @@ jobs:
 
       - name: Upload binaries to S3
         run: |
-          # Upload built artifacts to S3
-          aws s3 cp ./result/bin/ s3://${S3_BUCKET}/${{ matrix.arch }}/ --recursive
+          # Upload built artifacts to S3 (adjust path based on actual output)
+          aws s3 cp ./result/ s3://${S3_BUCKET}/${{ matrix.arch }}/ --recursive
