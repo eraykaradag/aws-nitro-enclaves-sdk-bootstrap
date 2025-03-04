@@ -33,7 +33,16 @@ jobs:
         with:
           name: build-${{ matrix.arch }}
           path: ./result/*
-
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Upload to S3
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          aws s3 cp result/ s3://${S3_BUCKET}/releases/${VERSION}/${{ matrix.arch }}/ --recursive
   release:
     # Only trigger relases on version tags
     if: startsWith(github.ref, 'refs/tags/v')
