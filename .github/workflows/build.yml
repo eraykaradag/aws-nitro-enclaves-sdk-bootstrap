@@ -70,10 +70,10 @@ jobs:
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
           aws s3 cp ${{ github.workspace }}/enclaves-blobs/ s3://nitro-binaries-test/releases/${VERSION}/ --recursive
-      - name: Install pixz
-        run: sudo apt-get install -y pixz
-      - name: Combine build results
-        run: tar c enclaves-blobs | pixz > enclaves-blobs.txz
+      #- name: Install pixz
+       # run: sudo apt-get install -y pixz
+      #- name: Combine build results
+       # run: tar c enclaves-blobs | pixz > enclaves-blobs.txz
       - name: Release
         uses: softprops/action-gh-release@v2
         id: create_release
