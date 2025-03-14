@@ -69,6 +69,11 @@ jobs:
       - name: Upload to S3
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
+          # Create folder structure
+          aws s3api put-object --bucket nitro-binaries-test --key releases/${VERSION}/ --content-length 0
+          aws s3api put-object --bucket nitro-binaries-test --key releases/${VERSION}/build-X64/x86_64/ --content-length 0
+          aws s3api put-object --bucket nitro-binaries-test --key releases/${VERSION}/build-ARM64/aarch64/ --content-length 0
+          # Copy files
           aws s3 cp ${{ github.workspace }}/enclaves-blobs/ s3://nitro-binaries-test/releases/${VERSION}/ --recursive
       - name: Install pixz
         run: sudo apt-get install -y pixz
