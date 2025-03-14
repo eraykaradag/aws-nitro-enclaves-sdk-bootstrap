@@ -83,6 +83,6 @@ jobs:
           body_path: ${{ github.workspace }}-CHANGELOG.txt
           generate_release_notes: true
           make_latest: true
-          files: enclaves-blobs
+          files: ${{ github.workspace }}/enclaves-blobs/
         env:
           GITHUB_TOKEN: ${{ github.token }}
