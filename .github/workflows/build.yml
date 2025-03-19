@@ -73,7 +73,7 @@ jobs:
       - name: Upload to S3
         run: |
           VERSION=${GITHUB_REF#refs/tags/v}
-          aws s3 cp ${{ github.workspace }}/enclaves-blobs.txz s3://nitro-binaries-test/releases/${VERSION}/
+          aws s3 cp ${{ github.workspace }}/enclaves-blobs.txz s3://nitro-binaries-test/${VERSION}/
       - name: Release
         uses: softprops/action-gh-release@v2
         id: create_release
