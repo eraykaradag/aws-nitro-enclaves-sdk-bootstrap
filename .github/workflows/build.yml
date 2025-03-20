@@ -63,7 +63,7 @@ jobs:
       - name: Install pixz
         run: sudo apt-get install -y pixz
       - name: Combine build results
-        run: tar c enclaves-blobs/build-ARM64/aarch64/ enclaves-blobs/build-X64/x86_64/ | pixz > enclaves-blobs.txz
+        run: tar cv enclaves-blobs/build-ARM64/aarch64/ enclaves-blobs/build-X64/x86_64/ | pixz > enclaves-blobs.txz
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
